@@ -106,7 +106,8 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let mut scheds = api::get_latest_schedules().await;
 
-    if std::env::args().collect::<Vec<String>>()[1] == "force" {
+    let argv = std::env::args().collect::<Vec<String>>();
+    if argv.len() >= 2 && argv[1] == "force" {
         println!("forcing post");
         mastodon.make_post(&get_sched_text(&scheds)).await;
         return Ok(())
