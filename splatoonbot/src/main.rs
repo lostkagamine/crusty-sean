@@ -1,6 +1,7 @@
 use std::io;
 
 use api::{Schedules, RankedGameMode};
+use chrono::Duration;
 
 pub mod api;
 pub mod mastodon;
@@ -109,6 +110,8 @@ async fn main() -> Result<(), anyhow::Error> {
         let now = chrono::Utc::now();
         let next = &scheds.turf_war.ends_at;
         let dur = next.signed_duration_since(now);
+        // just so we pull in up-to-date data...
+        let dur = dur + Duration::seconds(60);
         
         println!("posting in {}", format_duration(&dur));
         tokio::time::sleep(dur.to_std().unwrap()).await;
